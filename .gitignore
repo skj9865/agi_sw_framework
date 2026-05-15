@@ -1,0 +1,29 @@
+# Virtual environment
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Datasets (auto-downloaded or manually placed)
+algorithms/ff_algorithm/data/
+dataset/
+
+# Trained models & states
+algorithms/ff_algorithm/state/
+model/
+
+# Results & plots
+results/
+*.png
+*.csv
+
+# OS
+Thumbs.db
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+algorithms/monty/tbp.monty/

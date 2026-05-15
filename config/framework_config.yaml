@@ -1,0 +1,23 @@
+# Unified SW Framework Configuration
+
+framework:
+  device: "cuda:0"
+  seed: 1234
+  results_dir: "./results"
+
+algorithms:
+  ff:
+    enabled: true
+    config_path: "algorithms/ff_algorithm/config.json"
+    default_dataset: "cifar"
+    batchsize: 100
+
+  monty:                                                                                                                                                                                                                               
+    enabled: true                                                                                                                                                                                                         
+    default_dataset: "world_image"                                                                                                                                                                                                     
+    data_path: "dataset/worldimages/standard_scenes"             # null -> use $MONTY_DATA default                                                                                                                                                                      
+    model_path: "model/monty/pretrained_ycb_v12/surf_agent_1lm_numenta_lab_obj/pretrained"            # null -> use $MONTY_MODELS default                                                                                                                                                                    
+    max_episodes: null          # null -> all 48 episodes                                                                                                                                                                              
+    max_eval_steps: 500                                                                                                                                                                                                                
+    log_level: "INFO"            
+    output_csv: "monty_eval.csv"   # → ./results/monty_eval.csv 로 저장됨
