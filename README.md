@@ -204,8 +204,10 @@ bash install.sh
 ### Monty 실행 시 추가 준비
 FF는 데이터셋을 자동 다운로드하지만, Monty는 수동으로 준비해야 한다:
 
-1. **World image 데이터셋** - [Benchmark Experiments](https://thousandbrainsproject.readme.io/v0.27/docs/benchmark-experiments) 페이지에서 다운로드 후 `dataset/worldimages/standard_scenes/`에 배치
-2. **사전학습 모델** - [Getting Started](https://thousandbrainsproject.readme.io/docs/getting-started) 페이지에서 다운로드 후 `model/monty/.../pretrained/model.pt`에 배치
+1. **World image 데이터셋** - [Benchmark Experiments](https://thousandbrainsproject.readme.io/v0.27/docs/benchmark-experiments) 페이지에서 worldimages.zip(or tgz) 다운로드 후 `dataset/worldimages/standard_scenes/`에 배치
+2. **사전학습 모델** - [Getting Started](https://thousandbrainsproject.readme.io/docs/getting-started) 페이지에서 pretrained_ycb_v12.zip(or tgz) 다운로드 후 `model/monty/.../pretrained/model.pt`에 배치
+
+![폴더 구조](docs/images/folder_structure.png)
 
 ### CPU only 환경
 `install.sh`에서 PyTorch 설치 줄의 `cu118`을 `cpu`로 변경:

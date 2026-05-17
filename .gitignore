@@ -17,6 +17,7 @@ model/
 # Results & plots
 results/
 *.png
+!docs/images/*.png
 *.csv
 
 # OS
