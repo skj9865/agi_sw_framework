@@ -39,7 +39,7 @@ echo "[2/4] Upgrading pip..."
 
 # 3. Install all dependencies
 echo "[3/4] Installing dependencies..."
-"$PIP" install torch==2.0.0 torchvision==0.15.0 --index-url https://download.pytorch.org/whl/cu118 --quiet
+"$PIP" install torch==2.0.0 torchvision==0.15.0 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu118 --quiet
 "$PIP" install torch-scatter torch-sparse -f https://data.pyg.org/whl/torch-2.0.0+cu118.html --quiet
 "$PIP" install -r "$SCRIPT_DIR/requirements.txt" --quiet
 
