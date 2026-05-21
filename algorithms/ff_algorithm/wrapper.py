@@ -7,8 +7,19 @@ matplotlib.use("Agg")  # Non-interactive backend: plt.show() becomes no-op
 
 # Add ff_algorithm directory to path so its internal imports work
 _FF_DIR = os.path.dirname(os.path.abspath(__file__))
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(_FF_DIR))  # SW_framework/
 if _FF_DIR not in sys.path:
     sys.path.insert(0, _FF_DIR)
+
+# Link ff_algorithm/data -> SW_framework/dataset/ so FF's hardcoded './data' uses the unified path
+_FF_DATA_LINK = os.path.join(_FF_DIR, "data")
+_DATASET_DIR = os.path.join(_PROJECT_ROOT, "dataset")
+if not os.path.exists(_FF_DATA_LINK) and os.path.isdir(_DATASET_DIR):
+    try:
+        os.symlink(_DATASET_DIR, _FF_DATA_LINK, target_is_directory=True)
+    except OSError:
+        # Windows without developer mode: fall back to junction
+        os.system(f'mklink /J "{_FF_DATA_LINK}" "{_DATASET_DIR}"')
 
 from core.base_algorithm import BaseAlgorithm
 from core.registry import register_algorithm
