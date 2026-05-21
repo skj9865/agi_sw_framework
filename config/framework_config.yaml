@@ -21,3 +21,21 @@ algorithms:
     max_eval_steps: 500                                                                                                                                                                                                                
     log_level: "INFO"            
     output_csv: "monty_eval.csv"   # → ./results/monty_eval.csv 로 저장됨
+
+  ku_multimodal:
+    enabled: true
+    default_dataset: "shd_mnist"
+    shd_data_dir: "dataset/SHD"
+    mnist_data_dir: "dataset/MNIST"
+    checkpoint_path: "algorithms/ku_multimodal/used/sdt_shd_mnist_model_98.67.tar"
+    num_classes: 20
+    time_step: 4
+    dim: 256
+    num_heads: 8
+    patch_size: 8
+    layer: 2
+    n_time_bins: 64
+    n_freq_bins: 64
+    batch_size: 32
+    epochs: 300
+    lr: 5e-4

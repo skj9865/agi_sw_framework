@@ -1,0 +1,40 @@
+epochs: 300
+time_step: 4
+layer: 2
+dim: 256
+num_heads: 8
+patch_size: 8
+mlp_ratio: 4
+
+data_dir: /dataset/SHD
+dataset: shd
+num_classes: 20
+n_time_bins: 64
+n_freq_bins: 64
+input_size: [1, 64, 64]
+input_method: sum
+
+no_prefetcher: True
+time_jitter: 1
+spatial_jitter: 0.55
+noise: 35
+max_drop_chunk: 0.02
+drop_event: 0.1
+time_skew: 1.2
+cut_mix: 0.3 # not implemented yet
+
+sa_portion: 0.15
+sa_times: 2
+
+amp: True
+batch_size: 32
+lr: 5e-4
+min_lr: 1e-5
+sched: cosine
+weight_decay: 6e-2
+cooldown_epochs: 10
+warmup_epochs: 20
+warmup_lr: 0.00001
+opt: adamw
+smoothing: 0.1
+workers: 16
