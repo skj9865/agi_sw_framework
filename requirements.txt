@@ -6,6 +6,7 @@
 # ============================================
 torch==2.0.0
 torchvision==0.15.0
+torchaudio==2.0.1
 
 # Monty graph neural network
 torch-geometric==2.3.1
@@ -37,6 +38,13 @@ pandas
 wandb
 typing-extensions
 tqdm
+
+# ============================================
+# KU Multimodal (SNN Transformer)
+# ============================================
+spikingjelly==0.0.0.0.12
+timm==0.5.4
+tonic==1.2.2
 
 # ============================================
 # FF extras
