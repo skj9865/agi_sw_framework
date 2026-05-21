@@ -2,7 +2,15 @@
 
 Brain-inspired algorithm integration framework for KETI Global R&D.
 
-Forward-Forward (SCFF), TBP Monty, Neuromorphic 등 여러 알고리즘을 하나의 Python 환경에서 실행하고 비교할 수 있다.
+Forward-Forward (SCFF), TBP Monty, KU Multimodal (SNN Transformer) 등 여러 뇌-영감 알고리즘을 하나의 Python 환경에서 실행하고 비교할 수 있다.
+
+## 통합 알고리즘
+
+| 알고리즘 | 설명 | 데이터셋 | 모드 |
+|---------|------|---------|------|
+| **ff** | Forward-Forward (SCFF) - Contrastive 기반 local learning | CIFAR-10, MNIST, SVHN | train / evaluate |
+| **monty** | TBP Monty - Thousand Brains Project의 3D 객체 인식 | world_image (YCB objects) | evaluate |
+| **ku_multimodal** | SNN Transformer - Spiking Neural Network 멀티모달 분류 | SHD + MNIST (20 classes) | train / evaluate |
 
 ## Quick Start
 
@@ -34,9 +42,11 @@ python run.py --list
 python run.py --algorithm ff --dataset cifar10 --mode train
 python run.py --algorithm ff --dataset cifar10 --mode evaluate
 python run.py --algorithm monty --mode evaluate
+python run.py --algorithm ku_multimodal --mode evaluate
+python run.py --algorithm ku_multimodal --mode train
 
 # 여러 알고리즘 비교
-python run.py --compare ff monty --mode evaluate
+python run.py --compare ff monty ku_multimodal --mode evaluate
 ```
 
 ## 프로젝트 구조
@@ -60,12 +70,18 @@ SW_framework/
 │   ├── ff_algorithm/       # Forward-Forward
 │   │   ├── wrapper.py      # BaseAlgorithm 구현
 │   │   └── ...             # 기존 FF 코드 (수정 없음)
-│   └── monty/              # TBP Monty
-│       ├── wrapper/
-│       │   └── monty_algorithm.py  # BaseAlgorithm 구현
-│       ├── scripts/
-│       │   └── monty_inference.py
-│       └── tbp.monty/      # Monty 소스
+│   ├── monty/              # TBP Monty
+│   │   ├── wrapper/
+│   │   │   └── monty_algorithm.py  # BaseAlgorithm 구현
+│   │   ├── scripts/
+│   │   │   └── monty_inference.py
+│   │   └── tbp.monty/      # Monty 소스
+│   └── ku_multimodal/      # KU Multimodal (SNN Transformer)
+│       ├── wrapper.py       # BaseAlgorithm 구현
+│       ├── train_eval.py    # notebook에서 추출한 학습/평가 함수
+│       ├── model/           # SDT 모델 정의
+│       ├── module/          # SNN 트랜스포머 모듈
+│       └── spiking_audio_datasets.py  # SHD 데이터셋 로더
 │
 ├── dataset/                # 데이터셋 (git 제외)
 ├── model/                  # 사전학습 모델 (git 제외)
@@ -160,9 +176,10 @@ algorithms:
 ```bash
 python run.py --list
 # 출력:
-#   - ff           datasets: cifar10, mnist, svhn
-#   - monty        datasets: world_image
-#   - myalgo       datasets: cifar10, mnist        <-- 새로 추가됨
+#   - ff                datasets: cifar10, mnist, svhn
+#   - monty             datasets: world_image
+#   - ku_multimodal     datasets: shd_mnist
+#   - myalgo            datasets: cifar10, mnist        <-- 새로 추가됨
 ```
 
 ## 설정
@@ -210,6 +227,11 @@ FF는 데이터셋을 자동 다운로드하지만, Monty는 수동으로 준비
 아래와 같은 폴더 구조가 되도록 다운로드 받은 압축파일을 압축 해제한다.
 ![폴더 구조](docs/images/folder_structure.png)
 
+### KU Multimodal 실행 시 추가 준비
+- **SHD (Spiking Heidelberg Digits)**: tonic 라이브러리가 처음 실행 시 자동 다운로드한다. 수동 다운로드는 https://zenkelab.org/datasets/ 에서 가능.
+- **MNIST**: torchvision이 자동 다운로드한다.
+- **사전학습 모델**: `algorithms/ku_multimodal/used/` 에 체크포인트 파일 배치.
+
 ### CPU only 환경
 `install.sh`에서 PyTorch 설치 줄의 `cu118`을 `cpu`로 변경:
 ```bash
@@ -220,9 +242,14 @@ FF는 데이터셋을 자동 다운로드하지만, Monty는 수동으로 준비
 
 | 패키지 | 버전 | 용도 |
 |--------|------|------|
-| torch | 2.0.0 | FF + Monty 공통 |
-| numpy | 1.23.5 | FF + Monty 공통 |
-| scipy | 1.15.3 | FF + Monty 공통 |
-| matplotlib | 3.7.3 | FF + Monty 공통 |
+| torch | 2.0.0 | 전체 공통 |
+| torchvision | 0.15.0 | FF + KU Multimodal |
+| torchaudio | 2.0.1 | KU Multimodal 오디오 처리 |
+| numpy | 1.23.5 | 전체 공통 |
+| scipy | 1.15.3 | 전체 공통 |
+| matplotlib | 3.7.3 | 전체 공통 |
 | torch-geometric | 2.3.1 | Monty 모델 로딩 |
+| spikingjelly | 0.0.0.0.12 | KU Multimodal SNN 뉴런 |
+| timm | 0.5.4 | KU Multimodal 모델 레지스트리 |
+| tonic | 1.2.2 | KU Multimodal 뉴로모픽 데이터셋 |
 | pyyaml | 6.0+ | 프레임워크 설정 |
