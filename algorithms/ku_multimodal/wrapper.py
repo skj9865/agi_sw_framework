@@ -139,6 +139,8 @@ class KUMultimodalAlgorithm(BaseAlgorithm):
 
         from train_eval import LabelMatchedPairDataset
 
+        # SHD has 20 classes (0-19), MNIST has 10 (0-9)
+        # Notebook Cell 10: map_b = y + random.randint(0,1)*10 to create 20 classes
         paired_train = LabelMatchedPairDataset(
             ds_a=shd_train, ds_b=mnist_train,
             map_a=lambda y: y,
@@ -247,7 +249,7 @@ class KUMultimodalAlgorithm(BaseAlgorithm):
                                      shuffle=False, num_workers=0)
 
             loss_fn = LabelSmoothingCrossEntropy(smoothing=0.1).to(device)
-            amp_autocast = torch.cuda.amp.autocast if torch.cuda.is_available() else suppress
+            amp_autocast = torch.cuda.amp.autocast(dtype=torch.float16) if torch.cuda.is_available() else suppress()
 
             eval_metrics = validate_multimodal(
                 model, loader_eval, loss_fn,

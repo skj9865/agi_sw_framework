@@ -1,14 +1,13 @@
 """Training and evaluation functions extracted from notebook."""
 
 import time
-import logging
 import random
+import logging
 from collections import OrderedDict
 from contextlib import suppress
 
 import torch
 import torch.nn as nn
-import torchvision.utils
 from torch.utils.data import Dataset, DataLoader
 
 from spikingjelly.clock_driven import functional
@@ -19,60 +18,93 @@ _logger = logging.getLogger("ku_multimodal")
 
 
 # ---------------------------------------------------------------------------
-# LabelMatchedPairDataset
+# LabelMatchedPairDataset (from notebook Cell 9 - exact copy)
 # ---------------------------------------------------------------------------
 
-class LabelMatchedPairDataset(Dataset):
-    """Pair samples from two datasets by matching labels."""
+def _coerce_dataset(ds_or_loader):
+    if isinstance(ds_or_loader, DataLoader):
+        return ds_or_loader.dataset
+    return ds_or_loader
 
-    def __init__(self, ds_a, ds_b, map_a=None, map_b=None,
-                 num_classes=20, randomized=True, seed=123):
-        self.ds_a = ds_a
-        self.ds_b = ds_b
-        self.map_a = map_a or (lambda y: y)
-        self.map_b = map_b or (lambda y: y)
+
+def _enumerate_labels(ds, map_fn, num_classes=10):
+    N = len(ds)
+    labels = [None] * N
+    buckets = [[] for _ in range(num_classes)]
+    for i in range(N):
+        sample = ds[i]
+        if isinstance(sample, dict):
+            y = sample.get("label")
+        else:
+            _, y = sample
+        if torch.is_tensor(y):
+            y = int(y.item())
+        else:
+            y = int(y)
+        d = int(map_fn(y))
+        labels[i] = d
+        if 0 <= d < num_classes:
+            buckets[d].append(i)
+    return labels, buckets
+
+
+class LabelMatchedPairDataset(Dataset):
+    """Pairs items from two datasets by digit label.
+
+    ds_a: anchor (e.g. SHD), ds_b: secondary (e.g. MNIST).
+    map_a/map_b: map raw label -> digit for bucketing.
+    """
+
+    def __init__(self, ds_a, ds_b, map_a=lambda y: y, map_b=lambda y: y,
+                 num_classes=10, drop_missing=False, randomized=True, seed=42):
+        self.ds_a = _coerce_dataset(ds_a)
+        self.ds_b = _coerce_dataset(ds_b)
         self.num_classes = num_classes
         self.randomized = randomized
         self.rng = random.Random(seed)
 
-        # Build label -> index mapping for ds_b
-        self.b_by_label = {}
-        for idx in range(len(ds_b)):
-            _, y = ds_b[idx]
-            y_mapped = y % 10  # map to 0-9
-            self.b_by_label.setdefault(y_mapped, []).append(idx)
+        self.labels_a, _ = _enumerate_labels(self.ds_a, map_a, num_classes)
+        _, self.buckets_b = _enumerate_labels(self.ds_b, map_b, num_classes)
 
-        self.b_counters = {k: 0 for k in self.b_by_label}
+        present = {d for d in range(num_classes) if len(self.buckets_b[d]) > 0}
+        if not present:
+            raise ValueError("Secondary dataset has no digits after mapping.")
+        if drop_missing:
+            self.idx_a = [i for i, d in enumerate(self.labels_a) if d in present]
+        else:
+            self.idx_a = list(range(len(self.ds_a)))
+            missing = sorted({d for d in set(self.labels_a) if d not in present})
+            if missing:
+                raise ValueError(f"No samples for digits {missing} in secondary dataset.")
+
+        self.ptr = [0] * num_classes
+        for d in range(num_classes):
+            self.rng.shuffle(self.buckets_b[d])
 
     def __len__(self):
-        return len(self.ds_a)
+        return len(self.idx_a)
 
-    def __getitem__(self, idx):
-        x_a, y_a = self.ds_a[idx]
-        label_a = int(y_a)
-        # Map SHD label (0-19) to MNIST label (0-9) for matching
-        match_key = label_a % 10
+    def _pick_b_index(self, digit):
+        bucket = self.buckets_b[digit]
+        if self.randomized:
+            return self.rng.choice(bucket)
+        j = self.ptr[digit]
+        self.ptr[digit] = (j + 1) % len(bucket)
+        return bucket[j]
 
-        candidates = self.b_by_label.get(match_key, [])
-        if not candidates:
-            b_idx = 0
-        elif self.randomized:
-            b_idx = self.rng.choice(candidates)
-        else:
-            c = self.b_counters[match_key]
-            b_idx = candidates[c % len(candidates)]
-            self.b_counters[match_key] = c + 1
+    def __getitem__(self, i):
+        ai = self.idx_a[i]
+        x_aud, y_b_raw = self.ds_a[ai]
+        digit = self.labels_a[ai]
 
-        x_b, y_b = self.ds_b[b_idx]
-        combined_label = self.map_b(int(y_b))
+        bj = self._pick_b_index(digit)
+        x_img, y_a_raw = self.ds_b[bj]
 
-        # Ensure tensors
-        if not isinstance(x_a, torch.Tensor):
-            x_a = torch.tensor(x_a, dtype=torch.float32)
-        if not isinstance(x_b, torch.Tensor):
-            x_b = torch.tensor(x_b, dtype=torch.float32)
-
-        return {"audio": x_a, "image": x_b, "label": combined_label}
+        return {
+            "image": x_img,
+            "audio": x_aud,
+            "label": int(digit),
+        }
 
 
 # ---------------------------------------------------------------------------
@@ -181,7 +213,7 @@ def validate_multimodal(model, loader, loss_fn, amp_autocast=suppress, device="c
             audio = y["audio"].to(device)
             target = y["label"].to(device)
 
-            with amp_autocast():
+            with amp_autocast:
                 output = model(image, audio)
 
             if isinstance(output, (tuple, list)):
