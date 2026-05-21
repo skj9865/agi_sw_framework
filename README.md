@@ -95,10 +95,16 @@ SW_framework/
 │       ├── module/          # SNN 트랜스포머 모듈
 │       └── spiking_audio_datasets.py  # SHD 데이터셋 로더
 │
-├── dataset/                # 데이터셋 (git 제외)
+├── dataset/                # 전체 알고리즘 공통 데이터셋 (git 제외)
+│   ├── cifar-10-batches-py/    # FF (CIFAR-10, 자동 다운로드)
+│   ├── MNIST/                  # FF + KU Multimodal (자동 다운로드)
+│   ├── SHD/                    # KU Multimodal (자동 다운로드)
+│   └── worldimages/            # Monty (수동 다운로드)
 ├── model/                  # 사전학습 모델 (git 제외)
 └── results/                # 실행 결과 (git 제외)
 ```
+
+> 모든 알고리즘이 `dataset/` 디렉토리를 공통으로 사용한다. FF는 원본 코드에 `./data`가 하드코딩되어 있으나, wrapper가 자동으로 `algorithms/ff_algorithm/data` → `dataset/` 디렉토리 링크를 생성하여 원본 수정 없이 통일된 경로를 사용한다.
 
 ## 새 알고리즘 추가 방법
 
