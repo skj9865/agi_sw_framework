@@ -78,8 +78,10 @@ class KUMultimodalAlgorithm(BaseAlgorithm):
         from timm.models import create_model, load_checkpoint
         from train_eval import DualTimmConcat
 
-        # Import model registration
-        import model  # noqa: F401 - registers 'sdt' with timm
+        # Import model registration (registers 'sdt' with timm)
+        import importlib
+        import model as _ku_model
+        importlib.reload(_ku_model)
 
         model_kwargs = dict(
             pretrained=False,

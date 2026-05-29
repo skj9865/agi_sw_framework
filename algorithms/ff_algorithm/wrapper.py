@@ -60,6 +60,9 @@ class ForwardForwardAlgorithm(BaseAlgorithm):
 
     def _load_args_and_loaders(self):
         """Load FF-native arguments and data loaders based on dataset."""
+        # Ensure state directory exists for saving trained models
+        os.makedirs(os.path.join(_FF_DIR, "state"), exist_ok=True)
+
         original_dir = os.getcwd()
         os.chdir(_FF_DIR)
 
