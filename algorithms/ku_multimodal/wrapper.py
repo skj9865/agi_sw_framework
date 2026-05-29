@@ -49,7 +49,7 @@ class KUMultimodalAlgorithm(BaseAlgorithm):
         self._seed = config.get("seed", 42)
         self._epochs = config.get("epochs", 300)
         self._batch_size = config.get("batch_size", 32)
-        self._lr = config.get("lr", 5e-4)
+        self._lr = float(config.get("lr", 5e-4))
         self._shd_data_dir = config.get("shd_data_dir")
         self._mnist_data_dir = config.get("mnist_data_dir")
         self._checkpoint_path = config.get("checkpoint_path")
@@ -201,7 +201,7 @@ class KUMultimodalAlgorithm(BaseAlgorithm):
             lr_scheduler, _ = create_scheduler(sched_args, optimizer)
 
             loss_fn = LabelSmoothingCrossEntropy(smoothing=0.1).to(device)
-            amp_autocast = torch.cuda.amp.autocast if torch.cuda.is_available() else suppress
+            amp_autocast = torch.cuda.amp.autocast(dtype=torch.float16) if torch.cuda.is_available() else suppress()
             loss_scaler = NativeScaler() if torch.cuda.is_available() else None
 
             best_acc = 0.0

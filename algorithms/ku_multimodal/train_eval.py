@@ -156,7 +156,7 @@ def train_one_epoch(epoch, model, loader, optimizer, loss_fn,
         audio = y["audio"].to(device)
         target = y["label"].to(device)
 
-        with amp_autocast():
+        with amp_autocast:
             output = model(image, audio)
             loss = loss_fn(output, target)
 
