@@ -75,17 +75,12 @@ class KUMultimodalAlgorithm(BaseAlgorithm):
     def _build_model(self):
         """Build DualTimmConcat model with two SDT backbones."""
         import torch
-        from timm.models import create_model, load_checkpoint
+        from timm.models import load_checkpoint
         from train_eval import DualTimmConcat
-
-        # Import model registration (registers 'sdt' with timm)
-        import importlib
-        import model as _ku_model
-        importlib.reload(_ku_model)
+        from model.spikeformer import SpikeDrivenTransformer
 
         model_kwargs = dict(
-            pretrained=False,
-            drop_rate=0., drop_path_rate=0., drop_block_rate=None,
+            drop_rate=0., drop_path_rate=0.,
             img_size_h=self._n_freq_bins, img_size_w=self._n_freq_bins,
             patch_size=self._patch_size, embed_dims=self._dim,
             num_heads=self._num_heads, mlp_ratios=4,
@@ -93,8 +88,8 @@ class KUMultimodalAlgorithm(BaseAlgorithm):
             depths=self._layer, sr_ratios=1, T=self._time_step,
         )
 
-        backbone_mnist = create_model("sdt", **model_kwargs)
-        backbone_shd = create_model("sdt", **model_kwargs)
+        backbone_mnist = SpikeDrivenTransformer(**model_kwargs)
+        backbone_shd = SpikeDrivenTransformer(**model_kwargs)
 
         feat_dim = getattr(backbone_mnist, "num_features", self._dim)
 

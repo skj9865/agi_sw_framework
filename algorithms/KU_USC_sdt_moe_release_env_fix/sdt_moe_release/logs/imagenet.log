@@ -1,0 +1,47 @@
+2026-09-30 16:52:13,323 INFO: compat: torch 1.10.0 (weights_only=no), timm 0.5.4 (shim: timm.models.layers), spikingjelly 0.0.0.0.12 (shim: LIF/PLIF/reset_net, frames cast to float32)
+2026-09-30 16:52:13,335 INFO: Training with a single process on 1 GPUs.
+2026-09-30 16:52:14,167 INFO:   prune-only: survivors run full T (no timestep reduction)
+2026-09-30 16:52:14,168 INFO:   prune-tmean: prune iff T-averaged input entropy < exit_threshold
+2026-09-30 16:52:14,168 INFO: Creating model
+2026-09-30 16:52:14,169 INFO: number of params: 66419016
+2026-09-30 16:52:14,169 INFO:   early_exit=True, exit_metric=input_entropy, exit_mode=absolute, exit_threshold=0.5, exit_low_t=1, prune_threshold=None, entropy_norm=True
+2026-09-30 16:52:14,171 INFO: Model sdt created, param count:66419016
+INFO:timm.data.config:Data processing configuration for current model + dataset:
+Data processing configuration for current model + dataset:
+INFO:timm.data.config:	input_size: (3, 224, 224)
+	input_size: (3, 224, 224)
+INFO:timm.data.config:	interpolation: bicubic
+	interpolation: bicubic
+INFO:timm.data.config:	mean: (0.485, 0.456, 0.406)
+	mean: (0.485, 0.456, 0.406)
+INFO:timm.data.config:	std: (0.229, 0.224, 0.225)
+	std: (0.229, 0.224, 0.225)
+INFO:timm.data.config:	crop_pct: 0.95
+	crop_pct: 0.95
+2026-09-30 16:52:20,230 INFO: Using native Torch AMP. Training in mixed precision.
+2026-09-30 16:52:20,953 INFO: Loaded EMA weights (state_dict_ema) for inference
+2026-09-30 16:52:38,152 INFO: Test: [   0/781]  Time: 16.657 (16.657)  Loss:  0.6152 (0.6152)  Acc@1: 89.0625 (89.0625)  Acc@5: 96.8750 (96.8750)
+Traceback (most recent call last):
+  File "/home2/hyunseok/Code/sdt_moe_release/firing_num.py", line 1946, in <module>
+    main()
+  File "/home2/hyunseok/Code/sdt_moe_release/firing_num.py", line 1719, in main
+    eval_metrics = validate(
+  File "/home2/hyunseok/Code/sdt_moe_release/firing_num.py", line 1869, in validate
+    output, firing_dict = model(input, hook=dict())
+  File "/home2/hyunseok/anaconda3/envs/spikformer/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home2/hyunseok/Code/sdt_moe_release/model/spikeformer.py", line 176, in forward
+    x, hook = self.forward_features(x, hook=hook)
+  File "/home2/hyunseok/Code/sdt_moe_release/model/spikeformer.py", line 165, in forward_features
+    x, _, hook = blk(x, hook=hook)
+  File "/home2/hyunseok/anaconda3/envs/spikformer/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home2/hyunseok/Code/sdt_moe_release/module/ms_conv.py", line 1853, in forward
+    x, moe_loss, hook = self.mlp(x_attn, hook=hook)
+  File "/home2/hyunseok/anaconda3/envs/spikformer/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home2/hyunseok/Code/sdt_moe_release/module/ms_conv.py", line 1699, in forward
+    routed_output = torch.einsum('tebcd,bnec->tbnd', expert_outputs, combine_tensor)  # (T, B, N, D)
+  File "/home2/hyunseok/anaconda3/envs/spikformer/lib/python3.9/site-packages/torch/functional.py", line 327, in einsum
+    return _VF.einsum(equation, operands)  # type: ignore[attr-defined]
+RuntimeError: CUDA out of memory. Tried to allocate 38.00 MiB (GPU 0; 23.46 GiB total capacity; 21.99 GiB already allocated; 4.00 MiB free; 22.16 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

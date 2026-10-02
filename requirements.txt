@@ -1,5 +1,6 @@
 # Unified SW Framework - integrated dependencies
-# FF + Monty compatible versions
+# FF + Monty + KU Multimodal + KU USC SDT-MoE (env_fix)
+# Target: torch 2.0.0, timm 0.5.4, spikingjelly 0.0.0.0.12
 
 # ============================================
 # PyTorch (base version - compatibility anchor)
@@ -40,7 +41,7 @@ typing-extensions
 tqdm
 
 # ============================================
-# KU Multimodal (SNN Transformer)
+# KU Multimodal + KU USC SDT-MoE (SNN)
 # ============================================
 spikingjelly==0.0.0.0.12
 timm==0.5.4

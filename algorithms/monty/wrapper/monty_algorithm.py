@@ -1,6 +1,26 @@
 import sys
 import os
 
+# Patch torch-geometric Data.keys to behave as a property (Monty expects .keys not .keys())
+# Uses a descriptor so class-level access returns the method, instance-level returns the result.
+try:
+    from torch_geometric.data import Data as _Data
+
+    class _KeysDescriptor:
+        def __init__(self, orig):
+            self._orig = orig
+        def __get__(self, obj, objtype=None):
+            if obj is None:
+                return self._orig
+            return self._orig(obj)
+
+    if callable(getattr(_Data, 'keys', None)) and not isinstance(
+        getattr(type(_Data), 'keys', None), property
+    ):
+        _Data.keys = _KeysDescriptor(_Data.keys)
+except ImportError:
+    pass
+
 # algorithms/monty/wrapper/monty_algorithm.py
 _WRAPPER_DIR = os.path.dirname(os.path.abspath(__file__))
 _MONTY_DIR = os.path.dirname(_WRAPPER_DIR)            # algorithms/monty/

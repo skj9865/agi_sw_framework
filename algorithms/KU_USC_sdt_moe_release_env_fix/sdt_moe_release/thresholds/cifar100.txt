@@ -1,0 +1,13 @@
+# cifar100: per-(block,expert) input-entropy thresholds, row-major (b0e0..b0e3, b1e0, ...), 4 blocks x 4 experts = 16 values.
+# An expert is SKIPPED for an input when its T-averaged input entropy falls
+# below its threshold. -1.0 means never prune that expert.
+# Deployed operating point: top-1 78.06, 0.43/4 active experts.
+#
+# one line per block:
+   0.8590   0.9080   0.9089   0.8883   # block 0
+   0.9223   0.8492   0.8947   0.8967   # block 1
+   0.8947   0.8724   0.8826   0.8787   # block 2
+   0.8154   0.7696   0.7729   1.0000   # block 3
+#
+# flat form, ready for --exit-threshold-per-expert=<value>:
+0.8590,0.9080,0.9089,0.8883,0.9223,0.8492,0.8947,0.8967,0.8947,0.8724,0.8826,0.8787,0.8154,0.7696,0.7729,1.0000

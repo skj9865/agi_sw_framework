@@ -1,0 +1,60 @@
+# Recovery fine-tune of the EXPERT-PRUNED DVS128-Gesture 4-layer dim=192 MoE model.
+# Base ckpt: output/truncprune_gesture_4_192/model_best.pth.tar.
+# Deployment prune policy passed on the CLI (--ft-prune ... --exit-threshold-per-expert).
+#   vs from-scratch truncprune config: trunc_train OFF, EMA ON, short low-LR schedule.
+data_dir: /scratch1/bkrhee/data/DVSGesture/
+dataset: gesture
+pretrained: False
+num_classes: 11
+num_heads: 8
+img_size: 128
+crop_pct: 1.0
+scale:
+    - 1.0
+    - 1.0
+ratio: [1.0, 1.0]
+color_jitter: 0.
+interpolation: bicubic
+train_interpolation: bicubic
+use_conv_as_linear: true
+pooling_stat: "0111"
+in_channels: 2
+time_steps: 16
+layer: 4
+dim: 192
+mlp-ratio: 1
+
+moe-type: allrouted
+num_experts: 4
+top_k: 1
+mixing-mode: none
+mix-ratio: 0.5
+use_output_lif: False
+alternating_moe: False
+mlp_ratio_plain: 4
+finetune-router: False
+TET: False
+trunc_train: False
+trunc_min_t: 0
+
+# EMA on -> model_best is the EMA-tracked FT operating point
+model-ema: True
+model-ema-decay: 0.9998
+
+# Misc — short low-LR recovery schedule (base trained with lamb @3e-3)
+seed: 42
+amp: True
+channels-last: False
+batch_size: 16
+val_batch_size: 16
+lr: 3e-4
+min_lr: 1e-5
+sched: cosine
+weight_decay: 6e-2
+epochs: 20
+cooldown_epochs: 1
+warmup_epochs: 2
+warmup_lr: 1e-6
+opt: lamb
+smoothing: 0.1
+workers: 8

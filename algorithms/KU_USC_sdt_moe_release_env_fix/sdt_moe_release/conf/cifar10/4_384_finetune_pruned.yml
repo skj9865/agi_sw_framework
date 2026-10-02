@@ -1,0 +1,75 @@
+# Recovery fine-tune of the EXPERT-PRUNED CIFAR-10 4-layer dim=384 (iso-param ~9.4M) MoE model.
+# Base ckpt: output/truncprune_cifar10_4_384/model_best.pth.tar.
+# The deployment pruning policy is passed on the CLI (--ft-prune --early-exit
+# --exit-metric input_entropy --prune-tmean --prune-only --exit-threshold-per-expert),
+# so this one config fine-tunes any sensitivity-allocated operating point.
+#   Differences vs from-scratch truncprune config: trunc_train OFF (deterministic
+#   entropy prune, not random truncation), mixup OFF, EMA ON, short low-LR schedule.
+dataset: torch/cifar10
+pretrained: False
+num_classes: 10
+num_heads: 8
+img_size: 32
+mean:
+    - 0.4914
+    - 0.4822
+    - 0.4465
+std:
+    - 0.2470
+    - 0.2435
+    - 0.2616
+crop_pct: 1.0
+scale:
+    - 1.0
+    - 1.0
+ratio: [1.0, 1.0]
+interpolation: bicubic
+train_interpolation: bicubic
+use_conv_as_linear: true
+pooling_stat: "0011"
+time_steps: 4
+layer: 4
+dim: 384
+mlp-ratio: 1
+moe-type: allrouted
+mixing-mode: none
+mix-ratio: 0.5
+use_output_lif: False
+num_experts: 4
+alternating_moe: False
+mlp_ratio_plain: 4
+finetune-router: False
+top_k: 1
+
+# Keep TET; deterministic per-expert prune via CLI. trunc_train OFF for FT.
+TET: False
+trunc_train: False
+trunc_min_t: 0
+
+# Augmentation lightened for recovery FT (mixup/cutmix off)
+aa: rand-m9-n1-mstd0.4-inc1
+color_jitter: 0.5
+mixup: 0.0
+cutmix: 0.0
+
+# EMA on -> model_best is the EMA-tracked FT operating point
+model-ema: True
+model-ema-decay: 0.9998
+
+# Misc — short low-LR recovery schedule
+seed: 42
+amp: False
+channels-last: False
+batch_size: 32
+val_batch_size: 32
+lr: 1e-4
+min_lr: 1e-6
+sched: cosine
+weight_decay: 6e-2
+epochs: 20
+cooldown_epochs: 1
+warmup_epochs: 2
+warmup_lr: 1e-6
+opt: adamw
+smoothing: 0.1
+workers: 8

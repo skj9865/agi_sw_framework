@@ -1,0 +1,383 @@
+2026-09-30 16:50:13,770 INFO: compat: torch 1.10.0 (weights_only=no), timm 0.5.4 (shim: timm.models.layers), spikingjelly 0.0.0.0.12 (shim: LIF/PLIF/reset_net, frames cast to float32)
+2026-09-30 16:50:13,783 INFO: Training with a single process on 1 GPUs.
+2026-09-30 16:50:13,950 INFO:   prune-only: survivors run full T (no timestep reduction)
+2026-09-30 16:50:13,950 INFO:   prune-tmean: prune iff T-averaged input entropy < exit_threshold
+2026-09-30 16:50:13,950 INFO: Creating model
+2026-09-30 16:50:13,951 INFO: number of params: 9340346
+2026-09-30 16:50:13,951 INFO:   early_exit=True, exit_metric=input_entropy, exit_mode=absolute, exit_threshold=0.5, exit_low_t=1, prune_threshold=None, entropy_norm=True
+2026-09-30 16:50:13,952 INFO: Model sdt created, param count:9340346
+INFO:timm.data.config:Data processing configuration for current model + dataset:
+Data processing configuration for current model + dataset:
+INFO:timm.data.config:	input_size: (3, 32, 32)
+	input_size: (3, 32, 32)
+INFO:timm.data.config:	interpolation: bicubic
+	interpolation: bicubic
+INFO:timm.data.config:	mean: (0.4914, 0.4822, 0.4465)
+	mean: (0.4914, 0.4822, 0.4465)
+INFO:timm.data.config:	std: (0.247, 0.2435, 0.2616)
+	std: (0.247, 0.2435, 0.2616)
+INFO:timm.data.config:	crop_pct: 1.0
+	crop_pct: 1.0
+2026-09-30 16:50:20,885 INFO: AMP not enabled. Training in float32.
+2026-09-30 16:50:21,011 INFO: Loaded EMA weights (state_dict_ema) for inference
+INFO:timm.models.helpers:Loaded state_dict_ema from checkpoint 'checkpoints/cifar10/model_best.pth.tar'
+Loaded state_dict_ema from checkpoint 'checkpoints/cifar10/model_best.pth.tar'
+2026-09-30 16:50:32,606 INFO: Test: [   0/156]  Time: 10.783 (10.783)  Loss:  0.3732 (0.3732)  Acc@1: 92.1875 (92.1875)  Acc@5: 100.0000 (100.0000)
+2026-09-30 16:50:47,227 INFO: Test: [ 100/156]  Time: 0.157 (0.252)  Loss:  0.2482 (0.3043)  Acc@1: 95.3125 (94.6937)  Acc@5: 100.0000 (99.8298)
+2026-09-30 16:50:57,599 INFO: Test: [ 156/156]  Time: 2.340 (0.228)  Loss:  0.2909 (0.3028)  Acc@1: 93.7500 (94.7700)  Acc@5: 100.0000 (99.8600)
+2026-09-30 16:50:57,717 INFO: top-1: 94.77
+2026-09-30 16:50:57,718 INFO: non_zero: 
+2026-09-30 16:50:57,718 INFO: {
+    "t0": {
+        "MS_SPS_lif": 0.10499709426977068,
+        "MS_SPS_lif1": 0.09674932901013936,
+        "MS_SPS_lif2": 0.03049253506265629,
+        "MS_SPS_lif3": 0.0953794588708574,
+        "MS_SSA_Conv0_first_lif": 0.155189866472961,
+        "MS_SSA_Conv0_q_lif": 0.18446970087201217,
+        "MS_SSA_Conv0_k_lif": 0.01511854426875996,
+        "MS_SSA_Conv0_v_lif": 0.015316175553955595,
+        "MS_SSA_Conv0_kv_before": 0.003056548456730611,
+        "MS_SSA_Conv0_kv": 0.11405539866971859,
+        "MS_SSA_Conv0_x_after_qkv": 0.023082725055151944,
+        "MS_MLP_Expert0_fc1_lif": 0.07557771767780277,
+        "MS_MLP_Expert0_fc2_lif": 0.045881878798175006,
+        "MS_SSA_Conv1_first_lif": 0.16003791744288878,
+        "MS_SSA_Conv1_q_lif": 0.1267021891923973,
+        "MS_SSA_Conv1_k_lif": 0.021785254184860593,
+        "MS_SSA_Conv1_v_lif": 0.020961093295152024,
+        "MS_SSA_Conv1_kv_before": 0.003784337620826281,
+        "MS_SSA_Conv1_kv": 0.11069289286425155,
+        "MS_SSA_Conv1_x_after_qkv": 0.02025721280691225,
+        "MS_SSA_Conv2_first_lif": 0.2063511445517247,
+        "MS_SSA_Conv2_q_lif": 0.07881584491446264,
+        "MS_SSA_Conv2_k_lif": 0.031096322774380895,
+        "MS_SSA_Conv2_v_lif": 0.030398192679046823,
+        "MS_SSA_Conv2_kv_before": 0.01088923152591519,
+        "MS_SSA_Conv2_kv": 0.12897182067741514,
+        "MS_SSA_Conv2_x_after_qkv": 0.01857965311427025,
+        "MS_SSA_Conv3_first_lif": 0.23903065173236168,
+        "MS_SSA_Conv3_q_lif": 0.05208792554851298,
+        "MS_SSA_Conv3_k_lif": 0.026601017913494406,
+        "MS_SSA_Conv3_v_lif": 0.02653140981232792,
+        "MS_SSA_Conv3_kv_before": 0.012977085801952714,
+        "MS_SSA_Conv3_kv": 0.10859566787752123,
+        "MS_SSA_Conv3_x_after_qkv": 0.012446312388037421,
+        "head_lif": 0.21204857309912412
+    },
+    "t1": {
+        "MS_SPS_lif": 0.2151096753000961,
+        "MS_SPS_lif1": 0.1867351947063599,
+        "MS_SPS_lif2": 0.03269194240529573,
+        "MS_SPS_lif3": 0.13319192874203825,
+        "MS_SSA_Conv0_first_lif": 0.1710143484127749,
+        "MS_SSA_Conv0_q_lif": 0.14379165228258523,
+        "MS_SSA_Conv0_k_lif": 0.03103118945079245,
+        "MS_SSA_Conv0_v_lif": 0.03126254557550838,
+        "MS_SSA_Conv0_kv_before": 0.0058910507558510815,
+        "MS_SSA_Conv0_kv": 0.20484772052481423,
+        "MS_SSA_Conv0_x_after_qkv": 0.030771785987157477,
+        "MS_MLP_Expert0_fc1_lif": 0.0696561736412615,
+        "MS_MLP_Expert0_fc2_lif": 0.04472446644129014,
+        "MS_SSA_Conv1_first_lif": 0.16028750069328684,
+        "MS_SSA_Conv1_q_lif": 0.1195274847075185,
+        "MS_SSA_Conv1_k_lif": 0.03893696325346671,
+        "MS_SSA_Conv1_v_lif": 0.03796106488335158,
+        "MS_SSA_Conv1_kv_before": 0.005923216509970888,
+        "MS_SSA_Conv1_kv": 0.17405023595076954,
+        "MS_SSA_Conv1_x_after_qkv": 0.025634040751528087,
+        "MS_SSA_Conv2_first_lif": 0.19111847118207606,
+        "MS_SSA_Conv2_q_lif": 0.09746135622579327,
+        "MS_SSA_Conv2_k_lif": 0.05497012776174361,
+        "MS_SSA_Conv2_v_lif": 0.05397362111733473,
+        "MS_SSA_Conv2_kv_before": 0.01624040137936862,
+        "MS_SSA_Conv2_kv": 0.19377871632829086,
+        "MS_SSA_Conv2_x_after_qkv": 0.03151062238494809,
+        "MS_SSA_Conv3_first_lif": 0.21967628300822714,
+        "MS_SSA_Conv3_q_lif": 0.07904263312143381,
+        "MS_SSA_Conv3_k_lif": 0.05361997600320542,
+        "MS_SSA_Conv3_v_lif": 0.0510958572355299,
+        "MS_SSA_Conv3_kv_before": 0.02193682563279592,
+        "MS_SSA_Conv3_kv": 0.16142982434315287,
+        "MS_SSA_Conv3_x_after_qkv": 0.024832836888145235,
+        "head_lif": 0.22063107500663476
+    },
+    "t2": {
+        "MS_SPS_lif": 0.15717640044582878,
+        "MS_SPS_lif1": 0.15384134871691402,
+        "MS_SPS_lif2": 0.033784205240302276,
+        "MS_SPS_lif3": 0.1434183464941199,
+        "MS_SSA_Conv0_first_lif": 0.17562213419855532,
+        "MS_SSA_Conv0_q_lif": 0.11056414480675053,
+        "MS_SSA_Conv0_k_lif": 0.03355553499452628,
+        "MS_SSA_Conv0_v_lif": 0.0334594629372761,
+        "MS_SSA_Conv0_kv_before": 0.006114319884346805,
+        "MS_SSA_Conv0_kv": 0.2186377782477441,
+        "MS_SSA_Conv0_x_after_qkv": 0.0260636234485926,
+        "MS_MLP_Expert0_fc1_lif": 0.07229972644975989,
+        "MS_MLP_Expert0_fc2_lif": 0.0879023606610146,
+        "MS_SSA_Conv1_first_lif": 0.16837945763978726,
+        "MS_SSA_Conv1_q_lif": 0.08999837077600435,
+        "MS_SSA_Conv1_k_lif": 0.04051154231822668,
+        "MS_SSA_Conv1_v_lif": 0.03992100936338907,
+        "MS_SSA_Conv1_kv_before": 0.005772815388479048,
+        "MS_SSA_Conv1_kv": 0.1830546709129512,
+        "MS_SSA_Conv1_x_after_qkv": 0.020133972167968753,
+        "MS_SSA_Conv2_first_lif": 0.1866912720309701,
+        "MS_SSA_Conv2_q_lif": 0.09079131756112323,
+        "MS_SSA_Conv2_k_lif": 0.053015856732734956,
+        "MS_SSA_Conv2_v_lif": 0.05188365296446851,
+        "MS_SSA_Conv2_kv_before": 0.013854701048249658,
+        "MS_SSA_Conv2_kv": 0.20589711053609341,
+        "MS_SSA_Conv2_x_after_qkv": 0.02992932507946234,
+        "MS_SSA_Conv3_first_lif": 0.221015909927919,
+        "MS_SSA_Conv3_q_lif": 0.07743988118100825,
+        "MS_SSA_Conv3_k_lif": 0.05498460903289209,
+        "MS_SSA_Conv3_v_lif": 0.05159840107976503,
+        "MS_SSA_Conv3_kv_before": 0.020745615544086302,
+        "MS_SSA_Conv3_kv": 0.18054743481289814,
+        "MS_SSA_Conv3_x_after_qkv": 0.02930138622373026,
+        "head_lif": 0.22957901033373151
+    },
+    "t3": {
+        "MS_SPS_lif": 0.23949465377062512,
+        "MS_SPS_lif1": 0.17019215460289314,
+        "MS_SPS_lif2": 0.027598762208489093,
+        "MS_SPS_lif3": 0.1266734493765861,
+        "MS_SSA_Conv0_first_lif": 0.16625910959426002,
+        "MS_SSA_Conv0_q_lif": 0.08848786404684598,
+        "MS_SSA_Conv0_k_lif": 0.03404874052464836,
+        "MS_SSA_Conv0_v_lif": 0.033918801892841424,
+        "MS_SSA_Conv0_kv_before": 0.0066385532387249506,
+        "MS_SSA_Conv0_kv": 0.21544373465697977,
+        "MS_SSA_Conv0_x_after_qkv": 0.022775403000493473,
+        "MS_MLP_Expert0_fc1_lif": 0.0787971561375191,
+        "MS_MLP_Expert0_fc2_lif": 0.21140397025268295,
+        "MS_SSA_Conv1_first_lif": 0.18164927893636587,
+        "MS_SSA_Conv1_q_lif": 0.06302720169099782,
+        "MS_SSA_Conv1_k_lif": 0.039150084153355566,
+        "MS_SSA_Conv1_v_lif": 0.03929049902913931,
+        "MS_SSA_Conv1_kv_before": 0.0055729325409907444,
+        "MS_SSA_Conv1_kv": 0.17922928277600847,
+        "MS_SSA_Conv1_x_after_qkv": 0.014238977128533031,
+        "MS_SSA_Conv2_first_lif": 0.19648503751005594,
+        "MS_SSA_Conv2_q_lif": 0.07770241901373406,
+        "MS_SSA_Conv2_k_lif": 0.051058645714113934,
+        "MS_SSA_Conv2_v_lif": 0.04993467877624897,
+        "MS_SSA_Conv2_kv_before": 0.012432507395491224,
+        "MS_SSA_Conv2_kv": 0.20597201142847665,
+        "MS_SSA_Conv2_x_after_qkv": 0.02563561603521845,
+        "MS_SSA_Conv3_first_lif": 0.23410748524271008,
+        "MS_SSA_Conv3_q_lif": 0.07486667754543815,
+        "MS_SSA_Conv3_k_lif": 0.05558601508980851,
+        "MS_SSA_Conv3_v_lif": 0.0518761045613866,
+        "MS_SSA_Conv3_kv_before": 0.02031291467622081,
+        "MS_SSA_Conv3_kv": 0.1923670029690817,
+        "MS_SSA_Conv3_x_after_qkv": 0.03047292753895883,
+        "head_lif": 0.2531266587048831
+    }
+}
+2026-09-30 16:50:57,718 INFO: firing_rate: 
+2026-09-30 16:50:57,718 INFO: {
+    "t0": {
+        "MS_SPS_lif": 0.10499709669002295,
+        "MS_SPS_lif1": 0.09674933149366623,
+        "MS_SPS_lif2": 0.030492535703311306,
+        "MS_SPS_lif3": 0.09537946138602155,
+        "MS_SSA_Conv0_first_lif": 0.1551898714083775,
+        "MS_SSA_Conv0_q_lif": 0.18446970574415403,
+        "MS_SSA_Conv0_k_lif": 0.015118544606883439,
+        "MS_SSA_Conv0_v_lif": 0.015316175931625684,
+        "MS_SSA_Conv0_kv_before": 0.003056548532857827,
+        "MS_SSA_Conv0_kv": 0.1140554012481574,
+        "MS_SSA_Conv0_x_after_qkv": 0.023082725668124335,
+        "MS_MLP_Expert0_fc1_lif": 0.07557771990823134,
+        "MS_MLP_Expert0_fc2_lif": 0.045881879913389316,
+        "MS_SSA_Conv1_first_lif": 0.16003792225175603,
+        "MS_SSA_Conv1_q_lif": 0.1267021933368816,
+        "MS_SSA_Conv1_k_lif": 0.02178525478596899,
+        "MS_SSA_Conv1_v_lif": 0.020961093923943068,
+        "MS_SSA_Conv1_kv_before": 0.003784337715738137,
+        "MS_SSA_Conv1_kv": 0.11069289523704792,
+        "MS_SSA_Conv1_x_after_qkv": 0.020257213384292694,
+        "MS_SSA_Conv2_first_lif": 0.20635114970860208,
+        "MS_SSA_Conv2_q_lif": 0.07881584735053358,
+        "MS_SSA_Conv2_k_lif": 0.031096323624632903,
+        "MS_SSA_Conv2_v_lif": 0.030398193367157766,
+        "MS_SSA_Conv2_kv_before": 0.010889231844265376,
+        "MS_SSA_Conv2_kv": 0.12897182583429254,
+        "MS_SSA_Conv2_x_after_qkv": 0.01857965371933332,
+        "MS_SSA_Conv3_first_lif": 0.23903065654122907,
+        "MS_SSA_Conv3_q_lif": 0.05208792691682559,
+        "MS_SSA_Conv3_k_lif": 0.0266010185146028,
+        "MS_SSA_Conv3_v_lif": 0.02653141039761769,
+        "MS_SSA_Conv3_kv_before": 0.012977086144030857,
+        "MS_SSA_Conv3_kv": 0.10859567026613619,
+        "MS_SSA_Conv3_x_after_qkv": 0.012446312684636973,
+        "head_lif": 0.21204857803454072
+    },
+    "t1": {
+        "MS_SPS_lif": 0.21510968067843447,
+        "MS_SPS_lif1": 0.18673519979996298,
+        "MS_SPS_lif2": 0.032691943654968504,
+        "MS_SPS_lif3": 0.13319193339271906,
+        "MS_SSA_Conv0_first_lif": 0.17101435315836763,
+        "MS_SSA_Conv0_q_lif": 0.14379165724963897,
+        "MS_SSA_Conv0_k_lif": 0.031031190221951263,
+        "MS_SSA_Conv0_v_lif": 0.031262546457397684,
+        "MS_SSA_Conv0_kv_before": 0.0058910509179921685,
+        "MS_SSA_Conv0_kv": 0.20484772542859347,
+        "MS_SSA_Conv0_x_after_qkv": 0.030771786750406985,
+        "MS_MLP_Expert0_fc1_lif": 0.0696561761485164,
+        "MS_MLP_Expert0_fc2_lif": 0.0447244676672349,
+        "MS_SSA_Conv1_first_lif": 0.16028750493268307,
+        "MS_SSA_Conv1_q_lif": 0.11952748709613359,
+        "MS_SSA_Conv1_k_lif": 0.03893696452686741,
+        "MS_SSA_Conv1_v_lif": 0.037961066053931125,
+        "MS_SSA_Conv1_kv_before": 0.005923216670134644,
+        "MS_SSA_Conv1_kv": 0.174050241329108,
+        "MS_SSA_Conv1_x_after_qkv": 0.025634041411956403,
+        "MS_SSA_Conv2_first_lif": 0.19111847611749244,
+        "MS_SSA_Conv2_q_lif": 0.09746135875677603,
+        "MS_SSA_Conv2_k_lif": 0.05497012897186975,
+        "MS_SSA_Conv2_v_lif": 0.0539736223828261,
+        "MS_SSA_Conv2_kv_before": 0.016240401869746537,
+        "MS_SSA_Conv2_kv": 0.1937787209156971,
+        "MS_SSA_Conv2_x_after_qkv": 0.03151062344479712,
+        "MS_SSA_Conv3_first_lif": 0.21967628844984016,
+        "MS_SSA_Conv3_q_lif": 0.07904263576314709,
+        "MS_SSA_Conv3_k_lif": 0.05361997727660614,
+        "MS_SSA_Conv3_v_lif": 0.05109585838238145,
+        "MS_SSA_Conv3_kv_before": 0.02193682625367761,
+        "MS_SSA_Conv3_kv": 0.16142982889892185,
+        "MS_SSA_Conv3_x_after_qkv": 0.024832837544618895,
+        "head_lif": 0.22063108025842415
+    },
+    "t2": {
+        "MS_SPS_lif": 0.15717640576089273,
+        "MS_SPS_lif1": 0.15384135362069323,
+        "MS_SPS_lif2": 0.03378420657697757,
+        "MS_SPS_lif3": 0.14341835155608545,
+        "MS_SSA_Conv0_first_lif": 0.17562213957689365,
+        "MS_SSA_Conv0_q_lif": 0.11056414744846385,
+        "MS_SSA_Conv0_k_lif": 0.033555536275836295,
+        "MS_SSA_Conv0_v_lif": 0.03345946412367428,
+        "MS_SSA_Conv0_kv_before": 0.00611432004945388,
+        "MS_SSA_Conv0_kv": 0.21863778324643518,
+        "MS_SSA_Conv0_x_after_qkv": 0.026063624033882377,
+        "MS_MLP_Expert0_fc1_lif": 0.07229972905983588,
+        "MS_MLP_Expert0_fc2_lif": 0.08790236284398724,
+        "MS_SSA_Conv1_first_lif": 0.16837946282830207,
+        "MS_SSA_Conv1_q_lif": 0.08999837318043795,
+        "MS_SSA_Conv1_k_lif": 0.04051154355999011,
+        "MS_SSA_Conv1_v_lif": 0.03992101073170163,
+        "MS_SSA_Conv1_kv_before": 0.00577281554864281,
+        "MS_SSA_Conv1_kv": 0.1830546765760251,
+        "MS_SSA_Conv1_x_after_qkv": 0.020133972749303862,
+        "MS_SSA_Conv2_first_lif": 0.18669127744094574,
+        "MS_SSA_Conv2_q_lif": 0.09079131996555692,
+        "MS_SSA_Conv2_k_lif": 0.053015857958679746,
+        "MS_SSA_Conv2_v_lif": 0.051883654182503944,
+        "MS_SSA_Conv2_kv_before": 0.013854701392305123,
+        "MS_SSA_Conv2_kv": 0.2058971154082353,
+        "MS_SSA_Conv2_x_after_qkv": 0.02992932573198131,
+        "MS_SSA_Conv3_first_lif": 0.2210159145153252,
+        "MS_SSA_Conv3_q_lif": 0.0774398835696232,
+        "MS_SSA_Conv3_k_lif": 0.05498461024301827,
+        "MS_SSA_Conv3_v_lif": 0.05159840227407256,
+        "MS_SSA_Conv3_kv_before": 0.020745616157058708,
+        "MS_SSA_Conv3_kv": 0.18054744041269763,
+        "MS_SSA_Conv3_x_after_qkv": 0.029301386931614506,
+        "head_lif": 0.22957901580698173
+    },
+    "t3": {
+        "MS_SPS_lif": 0.2394946583896686,
+        "MS_SPS_lif1": 0.17019215956994682,
+        "MS_SPS_lif2": 0.027598762813552172,
+        "MS_SPS_lif3": 0.12667345378998732,
+        "MS_SSA_Conv0_first_lif": 0.16625911443476457,
+        "MS_SSA_Conv0_q_lif": 0.08848786676765252,
+        "MS_SSA_Conv0_k_lif": 0.03404874167149994,
+        "MS_SSA_Conv0_v_lif": 0.033918803071330314,
+        "MS_SSA_Conv0_kv_before": 0.00663855339394538,
+        "MS_SSA_Conv0_kv": 0.2154437397505827,
+        "MS_SSA_Conv0_x_after_qkv": 0.022775403633239148,
+        "MS_MLP_Expert0_fc1_lif": 0.07879715854195271,
+        "MS_MLP_Expert0_fc2_lif": 0.21140397544119763,
+        "MS_SSA_Conv1_first_lif": 0.18164928390341964,
+        "MS_SSA_Conv1_q_lif": 0.06302720377114927,
+        "MS_SSA_Conv1_k_lif": 0.03915008544257489,
+        "MS_SSA_Conv1_v_lif": 0.03929050010480698,
+        "MS_SSA_Conv1_kv_before": 0.0055729326863245224,
+        "MS_SSA_Conv1_kv": 0.17922928758487594,
+        "MS_SSA_Conv1_x_after_qkv": 0.014238977419200594,
+        "MS_SSA_Conv2_first_lif": 0.19648504257202146,
+        "MS_SSA_Conv2_q_lif": 0.07770242143398641,
+        "MS_SSA_Conv2_k_lif": 0.05105864702706124,
+        "MS_SSA_Conv2_v_lif": 0.049934679891463274,
+        "MS_SSA_Conv2_kv_before": 0.012432507713841408,
+        "MS_SSA_Conv2_kv": 0.20597201671190318,
+        "MS_SSA_Conv2_x_after_qkv": 0.025635616687737433,
+        "MS_SSA_Conv3_first_lif": 0.23410748979847906,
+        "MS_SSA_Conv3_q_lif": 0.07486668020297008,
+        "MS_SSA_Conv3_k_lif": 0.055586016339481216,
+        "MS_SSA_Conv3_v_lif": 0.051876105676600885,
+        "MS_SSA_Conv3_kv_before": 0.020312915324785144,
+        "MS_SSA_Conv3_kv": 0.19236700863215575,
+        "MS_SSA_Conv3_x_after_qkv": 0.03047292829034435,
+        "head_lif": 0.253126667468411
+    }
+}
+
+===== Early-exit usage =====
+expert groups running at low_T=1: 0/160000 (0.0%)   |   overall mean t_e = 0.45
+expert groups PRUNED (low entropy): 141985.0/160000 (88.7%)
+average active experts (t_e>0): 0.45/4 per block (1.80/16 total)   |   mean t_e among active = 4.00
+t_e distribution (over all image x expert): t_e=0: 88.7%  t_e=1: 0.0%  t_e=2: 0.0%  t_e=3: 0.0%  t_e=4: 11.3%
+  block.0.mlp  t_e dist: 0:67%  1:0%  2:0%  3:0%  4:33%
+  block.1.mlp  t_e dist: 0:91%  1:0%  2:0%  3:0%  4:9%
+  block.2.mlp  t_e dist: 0:100%  1:0%  2:0%  3:0%  4:0%
+  block.3.mlp  t_e dist: 0:97%  1:0%  2:0%  3:0%  4:3%
+
+Per-layer / per-expert  (mean t_e | %% at low_T | %% pruned | norm entropy | raw entropy):
+  block.0.mlp  expert 0: mean t_e = 0.19, t_e=1 in 0.0%, pruned 95.2%, norm entropy = n/a, raw entropy = n/a
+  block.0.mlp  expert 1: mean t_e = 0.83, t_e=1 in 0.0%, pruned 79.2%, norm entropy = n/a, raw entropy = n/a
+  block.0.mlp  expert 2: mean t_e = 1.40, t_e=1 in 0.0%, pruned 64.9%, norm entropy = n/a, raw entropy = n/a
+  block.0.mlp  expert 3: mean t_e = 2.77, t_e=1 in 0.0%, pruned 30.7%, norm entropy = n/a, raw entropy = n/a
+  block.1.mlp  expert 0: mean t_e = 0.00, t_e=1 in 0.0%, pruned 99.9%, norm entropy = n/a, raw entropy = n/a
+  block.1.mlp  expert 1: mean t_e = 0.39, t_e=1 in 0.0%, pruned 90.3%, norm entropy = n/a, raw entropy = n/a
+  block.1.mlp  expert 2: mean t_e = 0.74, t_e=1 in 0.0%, pruned 81.6%, norm entropy = n/a, raw entropy = n/a
+  block.1.mlp  expert 3: mean t_e = 0.32, t_e=1 in 0.0%, pruned 92.1%, norm entropy = n/a, raw entropy = n/a
+  block.2.mlp  expert 0: mean t_e = 0.03, t_e=1 in 0.0%, pruned 99.4%, norm entropy = n/a, raw entropy = n/a
+  block.2.mlp  expert 1: mean t_e = 0.00, t_e=1 in 0.0%, pruned 100.0%, norm entropy = n/a, raw entropy = n/a
+  block.2.mlp  expert 2: mean t_e = 0.01, t_e=1 in 0.0%, pruned 99.8%, norm entropy = n/a, raw entropy = n/a
+  block.2.mlp  expert 3: mean t_e = 0.01, t_e=1 in 0.0%, pruned 99.8%, norm entropy = n/a, raw entropy = n/a
+  block.3.mlp  expert 0: mean t_e = 0.20, t_e=1 in 0.0%, pruned 95.0%, norm entropy = n/a, raw entropy = n/a
+  block.3.mlp  expert 1: mean t_e = 0.09, t_e=1 in 0.0%, pruned 97.8%, norm entropy = n/a, raw entropy = n/a
+  block.3.mlp  expert 2: mean t_e = 0.10, t_e=1 in 0.0%, pruned 97.5%, norm entropy = n/a, raw entropy = n/a
+  block.3.mlp  expert 3: mean t_e = 0.13, t_e=1 in 0.0%, pruned 96.7%, norm entropy = n/a, raw entropy = n/a
+
+===== Routing-entropy structure (raw entropy in [0,1]) =====
+(object = top 75% firing tokens, background = bottom 25%)
+  block.0.mlp: image=0.670 | object=0.644 | background=0.695 | obj-bg gap=-0.051
+  block.1.mlp: image=0.596 | object=0.558 | background=0.625 | obj-bg gap=-0.067
+  block.2.mlp: image=0.530 | object=0.494 | background=0.554 | obj-bg gap=-0.060
+  block.3.mlp: image=0.499 | object=0.493 | background=0.497 | obj-bg gap=-0.004
+
+Per-expert (mean entropy | mean activity):
+  block.0.mlp expert 0: entropy=0.711, activity=63.09
+  block.0.mlp expert 1: entropy=0.640, activity=63.98
+  block.0.mlp expert 2: entropy=0.711, activity=64.19
+  block.0.mlp expert 3: entropy=0.612, activity=65.60
+  block.1.mlp expert 0: entropy=0.526, activity=72.64
+  block.1.mlp expert 1: entropy=0.614, activity=73.59
+  block.1.mlp expert 2: entropy=0.600, activity=75.49
+  block.1.mlp expert 3: entropy=0.643, activity=74.76
+  block.2.mlp expert 0: entropy=0.522, activity=88.37
+  block.2.mlp expert 1: entropy=0.511, activity=87.02
+  block.2.mlp expert 2: entropy=0.543, activity=87.55
+  block.2.mlp expert 3: entropy=0.543, activity=87.80
+  block.3.mlp expert 0: entropy=0.491, activity=108.22
+  block.3.mlp expert 1: entropy=0.505, activity=109.62
+  block.3.mlp expert 2: entropy=0.510, activity=106.80
+  block.3.mlp expert 3: entropy=0.490, activity=109.44

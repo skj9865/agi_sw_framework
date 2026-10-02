@@ -1,0 +1,81 @@
+# Fine-tune the EXPERT-PRUNED CIFAR-100 *mlp_ratio=1* (isoparam-10M) model.
+# Base ckpt: output/truncprune_isoparam10M_c100/model_best.pth.tar (acc 78.8).
+# Architecture: 2-block, dim 512, allrouted top-1, mlp-ratio 1, 4 experts,
+# mlp_ratio_plain 4 -> ~10.3M params (mlp-ratio 2 would be ~14.5M). The pruning
+# policy itself (--early-exit/--exit-metric/--prune-tmean/--prune-only/
+# --exit-threshold-per-layer) is passed on the CLI so one config fine-tunes
+# any swept operating point. Pair with --ft-prune and --finetune-mode.
+#
+# Differences vs the from-scratch truncprune config:
+#   - trunc_train OFF: we apply the DETERMINISTIC entropy prune (--ft-prune),
+#     not random per-expert truncation.
+#   - short schedule + low LR: this is a recovery fine-tune, not training.
+
+dataset: torch/cifar100
+pretrained: False
+num_classes: 100
+num_heads: 8
+img_size: 32
+mean:
+    - 0.5071
+    - 0.4867
+    - 0.4408
+std:
+    - 0.2675
+    - 0.2565
+    - 0.2761
+crop_pct: 1.0
+scale:
+    - 1.0
+    - 1.0
+ratio: [1.0, 1.0]
+interpolation: bicubic
+train_interpolation: bicubic
+use_conv_as_linear: true
+pooling_stat: "0011"
+time_steps: 4
+layer: 4
+dim: 384
+mlp-ratio: 1
+moe-type: allrouted
+mixing-mode: none
+mix-ratio: 0.5
+use_output_lif: False
+num_experts: 4
+alternating_moe: False
+mlp_ratio_plain: 4
+finetune-router: False
+top_k: 1
+
+# Keep TET (the base model was trained with it); deterministic prune via CLI.
+TET: False
+trunc_train: False
+trunc_min_t: 0
+
+# Augmentation & regularization (lighter than scratch: recovery fine-tune)
+aa: rand-m9-n1-mstd0.4-inc1
+color_jitter: 0.5
+mixup: 0.0
+cutmix: 0.0
+
+# Model Exponential Moving Average
+model-ema: False
+model-ema-decay: 0.9998
+
+# Misc
+seed: 42
+amp: False
+channels-last: False
+batch_size: 32
+val_batch_size: 32
+lr: 1e-4          # full FT; raise to ~5e-4 for LoRA
+min_lr: 1e-6
+sched: cosine
+weight_decay: 6e-2
+epochs: 40
+cooldown_epochs: 5
+warmup_epochs: 3
+warmup_lr: 1e-6
+opt: adamw
+smoothing: 0.1
+workers: 8

@@ -39,3 +39,9 @@ algorithms:
     batch_size: 32
     epochs: 300
     lr: 5e-4
+
+  ku_usc_sdt_moe:
+    enabled: true
+    default_dataset: "cifar10"
+    data_dir: "dataset"                  # base data dir; per-dataset subdirs resolved automatically
+    workers: 4

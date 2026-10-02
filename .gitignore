@@ -13,6 +13,18 @@ dataset/
 # Trained models & states
 algorithms/ff_algorithm/state/
 model/
+*.pth.tar
+
+# Archives (original algorithm tarballs)
+*.tar.gz
+algorithms/*.tar
+
+# Claude Code
+.claude/
+
+# Documents (non-code)
+*.docx
+*.pdf
 
 # Results & plots
 results/

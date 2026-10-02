@@ -1,0 +1,13 @@
+# gesture: per-(block,expert) input-entropy thresholds, row-major (b0e0..b0e3, b1e0, ...), 4 blocks x 4 experts = 16 values.
+# An expert is SKIPPED for an input when its T-averaged input entropy falls
+# below its threshold. -1.0 means never prune that expert.
+# Deployed operating point: top-1 98.61, 1.01/4 active experts.
+#
+# one line per block:
+   0.9543   0.9740   0.9746   0.9691   # block 0
+   0.9106   0.8914   0.9368   0.9140   # block 1
+   0.7751   0.8565   0.7729   0.8180   # block 2
+   0.7762   0.7637   0.7535   0.7944   # block 3
+#
+# flat form, ready for --exit-threshold-per-expert=<value>:
+0.9543,0.9740,0.9746,0.9691,0.9106,0.8914,0.9368,0.9140,0.7751,0.8565,0.7729,0.8180,0.7762,0.7637,0.7535,0.7944

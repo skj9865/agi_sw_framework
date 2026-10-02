@@ -1,0 +1,35 @@
+nohup: ignoring input
+DATA_ROOT = /scratch1/bkrhee/data
+
+############################################################ cifar10
+  data = /scratch1/bkrhee/data
+
+############################################################ cifar100
+  data = /scratch1/bkrhee/data
+
+############################################################ cifar10dvs
+  data = /scratch1/bkrhee/data/cifar10-dvs
+
+############################################################ gesture
+  data = /scratch1/bkrhee/data/DVSGesture
+
+############################################################ ncaltech
+  data = /scratch1/bkrhee/data/NCALTECH101
+  !! no accuracy parsed (rc=1) -- see /scratch2/bkrhee/sdt_moe_release/logs/ncaltech.log
+
+############################################################ imagenet
+  data = /project2/ppanda_1750/Share/imagenet
+
+=================== SDT-MoE inference results ===================
+dataset      top-1      expected   active     expected   status
+cifar10      94.8500    94.87      0.45       0.45       OK
+cifar100     78.0600    78.06      0.43       0.43       OK
+cifar10dvs   76.5000    76.5       0.55       0.54       OK
+gesture      98.6111    98.61      1.00       1.01       OK
+ncaltech     FAILED     76.81      ?          0.67       -
+imagenet     73.3420    73.34      1.96       1.96       OK
+
+'expected' is the accuracy and mean active-expert count measured on our side.
+A small difference is normal (fp16 vs fp32 changes LIF spike timing slightly);
+a large one usually means the data directory is not the expected layout.
+Logs: /scratch2/bkrhee/sdt_moe_release/logs/

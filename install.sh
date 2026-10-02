@@ -7,12 +7,12 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 VENV_DIR="$SCRIPT_DIR/.venv"
 #PYTHON= #수동으로 python 경로 지정하려면 여기에 설정 (예: PYTHON=/path/to/python3.10)
 
-# Find Python 3.10 automatically
-PYTHON="${PYTHON:-$(command -v python3.10 || command -v python3 || command -v python)}"
+# Find Python 3.10+ automatically
+PYTHON="${PYTHON:-$(command -v python3.10 || command -v python3.11 || command -v python3 || command -v python)}"
 PY_VERSION=$("$PYTHON" -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')" 2>/dev/null)
 echo "Using Python $PY_VERSION at: $PYTHON"
-if [[ "$PY_VERSION" != "3.10" ]]; then
-    echo "WARNING: Python 3.10 recommended (found $PY_VERSION). Set PYTHON env var to override."
+if [[ "$PY_VERSION" != "3.10" && "$PY_VERSION" != "3.11" ]]; then
+    echo "WARNING: Python 3.10 or 3.11 recommended (found $PY_VERSION). Set PYTHON env var to override."
     echo "  e.g.: PYTHON=/path/to/python3.10 bash install.sh"
 fi
 
