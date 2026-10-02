@@ -2,7 +2,7 @@
 
 Brain-inspired algorithm integration framework for KETI Global R&D.
 
-Forward-Forward (SCFF), TBP Monty, KU Multimodal (SNN Transformer) 등 여러 뇌-영감 알고리즘을 하나의 Python 환경에서 실행하고 비교할 수 있다.
+Forward-Forward (SCFF), TBP Monty, KU Multimodal (SNN Transformer), KU-USC SDT-MoE (Spike-Driven Transformer with Mixture-of-Experts) 등 여러 뇌-영감 알고리즘을 하나의 Python 환경에서 실행하고 비교할 수 있다.
 
 ## 통합 알고리즘
 
@@ -11,16 +11,18 @@ Forward-Forward (SCFF), TBP Monty, KU Multimodal (SNN Transformer) 등 여러 �
 | **ff** | Forward-Forward (SCFF) - Contrastive 기반 local learning | CIFAR-10, MNIST, SVHN | train / evaluate |
 | **monty** | TBP Monty - Thousand Brains Project의 3D 객체 인식 | world_image (YCB objects) | evaluate |
 | **ku_multimodal** | SNN Transformer - Spiking Neural Network 멀티모달 분류 | SHD + MNIST (20 classes) | train / evaluate |
+| **ku_usc_sdt_moe** | SDT-MoE - Spike-Driven Transformer with Mixture-of-Experts (입력 엔트로피 기반 동적 전문가 프루닝) | CIFAR-10, CIFAR-100, ImageNet, CIFAR10-DVS, DVS128 Gesture, N-Caltech101 | evaluate |
 
 ## Benchmark 결과
 
-`python run.py --compare ff monty ku_multimodal --mode evaluate` 실행 결과:
+`python run.py --compare ff monty ku_multimodal ku_usc_sdt_moe --mode evaluate` 실행 결과:
 
 | 알고리즘 | 정확도 | 소요 시간 | 데이터셋 |
 |---------|--------|----------|---------|
 | ff | 80.17% | 1221초 | CIFAR-10 |
 | monty | 70.83% | 858초 | world_image (48 episodes) |
-| ku_multimodal | 98.72% | 155초 | SHD + MNIST |
+| ku_multimodal | 98.76% | 116초 | SHD + MNIST |
+| ku_usc_sdt_moe | 94.85% | 69초 | CIFAR-10 (MoE pruning: 88.7% experts pruned) |
 
 > 각 알고리즘은 서로 다른 데이터셋과 태스크를 사용하므로, 정확도를 직접 비교하는 것은 적절하지 않다. 동일 프레임워크에서 실행/관리할 수 있다는 점이 핵심이다.
 
@@ -56,9 +58,10 @@ python run.py --algorithm ff --dataset cifar10 --mode evaluate
 python run.py --algorithm monty --mode evaluate
 python run.py --algorithm ku_multimodal --mode evaluate
 python run.py --algorithm ku_multimodal --mode train
+python run.py --algorithm ku_usc_sdt_moe --dataset cifar10 --mode evaluate
 
 # 여러 알고리즘 비교
-python run.py --compare ff monty ku_multimodal --mode evaluate
+python run.py --compare ff monty ku_multimodal ku_usc_sdt_moe --mode evaluate
 ```
 
 ## 프로젝트 구조
@@ -88,18 +91,30 @@ SW_framework/
 │   │   ├── scripts/
 │   │   │   └── monty_inference.py
 │   │   └── tbp.monty/      # Monty 소스
-│   └── ku_multimodal/      # KU Multimodal (SNN Transformer)
-│       ├── wrapper.py       # BaseAlgorithm 구현
-│       ├── train_eval.py    # notebook에서 추출한 학습/평가 함수
-│       ├── model/           # SDT 모델 정의
-│       ├── module/          # SNN 트랜스포머 모듈
-│       └── spiking_audio_datasets.py  # SHD 데이터셋 로더
+│   ├── ku_multimodal/      # KU Multimodal (SNN Transformer)
+│   │   ├── wrapper.py       # BaseAlgorithm 구현
+│   │   ├── train_eval.py    # notebook에서 추출한 학습/평가 함수
+│   │   ├── model/           # SDT 모델 정의
+│   │   ├── module/          # SNN 트랜스포머 모듈
+│   │   └── spiking_audio_datasets.py  # SHD 데이터셋 로더
+│   └── KU_USC_sdt_moe_release_env_fix/  # KU-USC SDT-MoE
+│       ├── wrapper.py       # BaseAlgorithm 구현 (sj_compat 기반)
+│       └── sdt_moe_release/ # 원본 코드 (수정 없음)
+│           ├── sj_compat.py     # 환경 호환성 레이어
+│           ├── model/           # SpikeDrivenTransformer 모델
+│           ├── module/          # MoE 모듈 (EarlyExitMeter 등)
+│           ├── manifest.json    # 6개 데이터셋별 설정/체크포인트 매핑
+│           └── checkpoints/     # 사전학습 모델 (git 제외, 수동 배치)
 │
 ├── dataset/                # 전체 알고리즘 공통 데이터셋 (git 제외)
 │   ├── cifar-10-batches-py/    # FF (CIFAR-10, 자동 다운로드)
 │   ├── MNIST/                  # FF + KU Multimodal (자동 다운로드)
 │   ├── SHD/                    # KU Multimodal (자동 다운로드)
-│   └── worldimages/            # Monty (수동 다운로드)
+│   ├── worldimages/            # Monty (수동 다운로드)
+│   ├── imagenet/               # SDT-MoE ImageNet (수동 배치)
+│   ├── cifar10-dvs/            # SDT-MoE CIFAR10-DVS (자동 다운로드)
+│   ├── DVSGesture/             # SDT-MoE DVS128 Gesture (자동 다운로드)
+│   └── NCALTECH101/            # SDT-MoE N-Caltech101 (자동 다운로드)
 ├── model/                  # 사전학습 모델 (git 제외)
 └── results/                # 실행 결과 (git 제외)
 ```
@@ -197,6 +212,7 @@ python run.py --list
 #   - ff                datasets: cifar10, mnist, svhn
 #   - monty             datasets: world_image
 #   - ku_multimodal     datasets: shd_mnist
+#   - ku_usc_sdt_moe    datasets: cifar10, cifar100, imagenet, cifar10dvs, gesture, ncaltech
 #   - myalgo            datasets: cifar10, mnist        <-- 새로 추가됨
 ```
 
@@ -250,6 +266,13 @@ FF는 데이터셋을 자동 다운로드하지만, Monty는 수동으로 준비
 - **MNIST**: torchvision이 자동 다운로드한다.
 - **사전학습 모델**: `algorithms/ku_multimodal/used/` 에 체크포인트 파일 배치.
 
+### KU-USC SDT-MoE 실행 시 추가 준비
+- **체크포인트 파일**: `algorithms/KU_USC_sdt_moe_release_env_fix/sdt_moe_release/checkpoints/` 에 데이터셋별 `model_best.pth.tar` 파일 배치. 용량이 커서 git에 포함되지 않으므로 별도 전달받아야 한다.
+- **CIFAR-10/100**: torchvision이 자동 다운로드 (`dataset/` 하위)
+- **ImageNet**: `dataset/imagenet/` 에 ILSVRC2012 validation 셋 수동 배치
+- **DVS 데이터셋** (CIFAR10-DVS, DVS128 Gesture, N-Caltech101): spikingjelly가 처음 실행 시 자동 다운로드. 시간이 오래 걸릴 수 있다.
+- 지원 데이터셋: `cifar10`, `cifar100`, `imagenet`, `cifar10dvs`, `gesture`, `ncaltech`
+
 ### CPU only 환경
 `install.sh`에서 PyTorch 설치 줄의 `cu118`을 `cpu`로 변경:
 ```bash
@@ -267,7 +290,7 @@ FF는 데이터셋을 자동 다운로드하지만, Monty는 수동으로 준비
 | scipy | 1.15.3 | 전체 공통 |
 | matplotlib | 3.7.3 | 전체 공통 |
 | torch-geometric | 2.3.1 | Monty 모델 로딩 |
-| spikingjelly | 0.0.0.0.12 | KU Multimodal SNN 뉴런 |
-| timm | 0.5.4 | KU Multimodal 모델 레지스트리 |
+| spikingjelly | 0.0.0.0.12 | KU Multimodal + SDT-MoE SNN 뉴런 (SDT-MoE는 sj_compat 호환 레이어 사용) |
+| timm | 0.5.4 | KU Multimodal + SDT-MoE 모델 레지스트리 |
 | tonic | 1.2.2 | KU Multimodal 뉴로모픽 데이터셋 |
 | pyyaml | 6.0+ | 프레임워크 설정 |
